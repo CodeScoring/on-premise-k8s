@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipcs-frontend
+spec:
+  serviceName: ipcs-frontend
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipcs-frontend
+  template:
+    metadata:
+      labels:
+        app: ipcs-frontend
+    spec:
+      volumes:
+        - name: django-static
+          persistentVolumeClaim:
+            claimName: django-static-pvc
+      containers:
+        - name: ipcs-frontend
+          image: registry-one.codescoring.com/ipcs-frontend:onprem
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: django-static
+              mountPath: /ipcs-backend/static
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: cs-registry
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+     app: ipcs-frontend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+

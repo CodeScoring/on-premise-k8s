@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ipcs-migrations
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      containers:
+        - name: ipcs-migrate
+          image: registry-one.codescoring.com/ipcs-backend:onprem
+          command: ['python', 'manage.py', 'migrate']
+
+          envFrom:
+          - configMapRef:
+              name: ipcs-env
+          - secretRef:
+              name: ipcs-secrets
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: cs-registry
+
+      restartPolicy: OnFailure
+  backoffLimit: 5
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ipcs-collectstatic
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      containers:
+        - name: ipcs-collectstatic
+          image: registry-one.codescoring.com/ipcs-backend:onprem
+          command: ['python', 'manage.py', 'collectstatic']
+
+          envFrom:
+          - configMapRef:
+              name: ipcs-env
+          - secretRef:
+              name: ipcs-secrets
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: cs-registry
+
+      restartPolicy: OnFailure
+  backoffLimit: 5
+

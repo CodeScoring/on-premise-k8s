@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ipcs-env
+data:
+  SITE_SCHEME: "https"
+  SITE_HOST: "codescoring.k8s.local"
+  NGINX_HOST: "codescoring.k8s.local"
+  NGINX_PORT: "8080"
+  HOME: "/root"
+  BASE_DIR: "/ipcs-backend"
+  DJANGO_CACHES_REDIS_URL: "redis://redis:6379/1"
+  ANALYSIS_ROOT: "/analysis-root"
+  HUEY_REDIS_URL: "redis://redis:6379/0"
+  NODE_PATH: "/jscpd/node_modules"
+  JOHNNY_BIN: "/agents/johnny-linux-amd64"
+  HASHER_BIN: "/agents/hasher-linux-amd64"
+  JSCPD_BIN_PATH: "/jscpd/node_modules/jscpd/bin/jscpd"
+  ALLOWED_HOSTS: "*"
+  HUEY_WORKERS: "8"
+  INDEX_API_URL: "https://index.codescoring.ru"
+  REQUESTS_CA_BUNDLE: "/etc/ssl/certs/ca-certificates.crt"
+  DJANGO_CSRF_TRUSTED_ORIGINS: "localhost:18000"
+  SENTRY_ENABLED: "False"
+  SENTRY_ENVIRONMENT: ""
+  SENTRY_RELEASE: ""
+

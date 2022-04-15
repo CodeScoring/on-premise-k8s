@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ipcs-createsuperuser
+spec:
+  template:
+    spec:
+      containers:
+        - name: ipcs-createsuperuser
+          image: registry-one.codescoring.com/ipcs-backend:onprem
+          command: ['python', 'manage.py', 'createsuperuser', '--noinput' ]
+
+          envFrom:
+          - configMapRef:
+              name: ipcs-env
+          - secretRef:
+              name: ipcs-secrets
+      imagePullSecrets:
+        - name: cs-registry
+
+      restartPolicy: Never
+  backoffLimit: 1

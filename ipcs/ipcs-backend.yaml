@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipcs-huey
+
+spec:
+  serviceName: ipcs-huey
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipcs-huey
+
+  template:
+    metadata:
+      labels:
+        app: ipcs-huey
+    spec:
+
+      volumes:
+        - name: analysis-root
+          persistentVolumeClaim:
+            claimName: analysis-root-pvc
+
+      containers:
+        - name: ipcs-huey
+          image: registry-one.codescoring.com/ipcs-huey:onprem
+          command: ["python"]
+          args: [ "manage.py", "run_huey" ]
+
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+            - secretRef:
+                name: ipcs-secrets
+
+          volumeMounts:
+            - name: analysis-root
+              mountPath: /analysis-root
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: cs-registry
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipcs-backend
+
+spec:
+  serviceName: ipcs-backend
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipcs-backend
+
+  template:
+    metadata:
+      labels:
+        app: ipcs-backend
+    spec:
+
+      volumes:
+        - name: django-static
+          persistentVolumeClaim:
+            claimName: django-static-pvc
+        - name: analysis-root
+          persistentVolumeClaim:
+            claimName: analysis-root-pvc
+
+      containers:
+        - name: ipcs-backend
+          image: registry-one.codescoring.com/ipcs-backend:onprem
+          command: ["gunicorn"]
+          args: [ "ipcs.wsgi", "-c", "gunicorn_conf.py" ]
+
+          ports:
+            - containerPort: 18000
+
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+            - secretRef:
+                name: ipcs-secrets
+
+          volumeMounts:
+            - name: django-static
+              mountPath: /ipcs-backend/static
+            - name: analysis-root
+              mountPath: /analysis-root
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: cs-registry
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+     app: ipcs-backend
+  ports:
+    - protocol: TCP
+      port: 18000
+      targetPort: 18000
