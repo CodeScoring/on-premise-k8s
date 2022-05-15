@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ipcs-backup-pvc
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 15Gi
+  volumeName: ipcs-backup-pv
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ipcs-backup-pv
+  labels:
+    type: local
+spec:
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: manual
+  volumeMode: Filesystem
+  capacity:
+    storage: 15Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /cs-storage/ipcs-backup
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ipcs-createbackup
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      containers:
+        - name: ipcs-createbackup
+          image: registry-one.codescoring.com/ipcs-backup
+          args: ['create']
+
+          env:
+            - name: POSTGRES_HOST
+              value: postgres
+            - name: POSTGRES_USER
+              value: codescoring
+
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-creds
+                  key: POSTGRES_PASSWORD
+
+            - name: POSTGRES_DB
+              value: codescoring
+
+          envFrom:
+          - configMapRef:
+              name: ipcs-env
+          - secretRef:
+              name: ipcs-secrets
+          volumeMounts:
+            - name: ipcs-backup-mount
+              mountPath: /backup
+
+      imagePullSecrets:
+        - name: cs-registry
+
+      volumes:
+        - name: ipcs-backup-mount
+          persistentVolumeClaim:
+            claimName: ipcs-backup-pvc
+
+      restartPolicy: Never
+      # uncomment this for node affinity
+#      nodeSelector:
+#            name: node-for-backup
+  backoffLimit: 1
