@@ -11,7 +11,7 @@ data:
   BASE_DIR: "/ipcs-backend"
   DJANGO_CACHES_REDIS_URL: "redis://redis:6379/1"
   ANALYSIS_ROOT: "/analysis-root"
-  ANALYSIS_IGNORED_PATHS: "**/.git*,**/.git/**,**/fixtures/**,**/tests/**,**/doc/**,**/docs/**,**/samples/**,**/Migrations/**,**/*.Designer.cs"
+  ANALYSIS_IGNORED_PATHS: "**/.git*,**/.git/**,**/fixtures/**,**/tests/**,**/doc/**,**/docs/**,**/samples/**"
   HUEY_REDIS_URL: "redis://redis:6379/0"
   NODE_PATH: "/jscpd/node_modules"
   JOHNNY_BIN: "/agents/johnny-linux-amd64"
