@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: ipcs-createsuperuser
-          image: registry-one.codescoring.com/ipcs-backend:onprem
+          image: registry-one.codescoring.ru/ipcs-backend:2022.48.1
           command: ['python', 'manage.py', 'createsuperuser', '--noinput' ]
 
           envFrom:

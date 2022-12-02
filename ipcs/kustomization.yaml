@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./ipcs-backend.yaml
+  - ./ipcs-frontend.yaml
+  - ./ipcs-migration.yaml
+namespace: codescoring
+images:
+  - name: registry.one.codescoring.ru/ipcs-huey
+    newTag: "2022.48.1"
+  - name: registry.one.codescoring.ru/ipcs-backend
+    newTag: "2022.48.1"
+  - name: registry-one.codescoring.ru/ipcs-backup
+    newTag: "2022.48.1"
+  - name: registry-one.codescoring.ru/ipcs-frontend
+    newTag: "2022.48.1"

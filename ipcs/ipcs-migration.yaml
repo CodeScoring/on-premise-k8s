@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: ipcs-migrate
-          image: registry-one.codescoring.com/ipcs-backend:onprem
+          image: registry-one.codescoring.ru/ipcs-backend
           command: ['python', 'manage.py', 'migrate']
 
           envFrom:
@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: ipcs-collectstatic
-          image: registry-one.codescoring.com/ipcs-backend:onprem
+          image: registry-one.codescoring.ru/ipcs-backend
           command: ['python', 'manage.py', 'collectstatic']
 
           envFrom:
