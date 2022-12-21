@@ -7,7 +7,7 @@ data:
   SITE_HOST: "codescoring.k8s.local"
   NGINX_HOST: "codescoring.k8s.local"
   NGINX_PORT: "8080"
-  HOME: "/root"
+  HOME: "/ipcs-backend"
   BASE_DIR: "/ipcs-backend"
   DJANGO_CACHES_REDIS_URL: "redis://redis:6379/1"
   ANALYSIS_ROOT: "/analysis-root"
