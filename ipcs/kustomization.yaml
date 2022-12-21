@@ -7,10 +7,10 @@ resources:
 namespace: codescoring
 images:
   - name: registry.one.codescoring.ru/ipcs-huey
-    newTag: "2022.48.1"
+    newTag: "2022.51.0-unpriv"
   - name: registry.one.codescoring.ru/ipcs-backend
-    newTag: "2022.48.1"
+    newTag: "2022.51.0-unpriv"
   - name: registry-one.codescoring.ru/ipcs-backup
-    newTag: "2022.48.1"
+    newTag: "2022.51.0-unpriv"
   - name: registry-one.codescoring.ru/ipcs-frontend
-    newTag: "2022.48.1"
+    newTag: "2022.51.0-unpriv"
