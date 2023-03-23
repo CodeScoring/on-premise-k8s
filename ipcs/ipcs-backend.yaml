@@ -23,7 +23,7 @@ spec:
 
       containers:
         - name: ipcs-tasks-high-priority
-          image: registry-one.codescoring.ru/ipcs-huey
+          image: registry-one.codescoring.ru/ipcs-huey:2023.5.0
           command: ["python"]
           args: [ "manage.py", "djangohuey", "--queue", "high-priority" ]
 
@@ -66,7 +66,7 @@ spec:
 
       containers:
         - name: ipcs-huey
-          image: registry-one.codescoring.ru/ipcs-huey
+          image: registry-one.codescoring.ru/ipcs-huey:2023.5.0
           command: ["python"]
           args: [ "manage.py", "djangohuey", "--queue", "ipcs" ]
 
@@ -113,7 +113,7 @@ spec:
 
       containers:
         - name: ipcs-backend
-          image: registry-one.codescoring.ru/ipcs-backend
+          image: registry-one.codescoring.ru/ipcs-backend:2023.5.0
           command: ["gunicorn"]
           args: [ "ipcs.wsgi", "-c", "gunicorn_conf.py" ]
 
@@ -128,7 +128,7 @@ spec:
 
           volumeMounts:
             - name: django-static
-              mountPath: /ipcs-backend/static
+              mountPath: /ipcs-backend/files/static
             - name: analysis-root
               mountPath: /analysis-root
           imagePullPolicy: Always

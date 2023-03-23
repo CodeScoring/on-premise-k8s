@@ -95,7 +95,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:13.4
+          image: registry-one.codescoring.ru/postgres:13.4
           envFrom:
             - configMapRef:
                 name: postgres-configmap
@@ -119,6 +119,8 @@ spec:
           args:
             - "-c"
             - "config_file=/etc/postgresql/postgresql.conf"
+      imagePullSecrets:
+        - name: cs-registry
       volumes:
         - name: postgres-volume-mount
           persistentVolumeClaim:

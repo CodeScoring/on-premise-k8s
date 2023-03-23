@@ -59,7 +59,7 @@ spec:
     spec:
       containers:
       - name: redis
-        image: redis:latest
+        image: registry-one.codescoring.ru/redis:7.0.5
         resources:
           requests:
             memory: 512Mi
@@ -71,6 +71,8 @@ spec:
         args:
           - "--stop-writes-on-bgsave-error no"
           - "--save 60 1"
+      imagePullSecrets:
+        - name: cs-registry
       volumes:
         - name: redis-pv
           persistentVolumeClaim:
