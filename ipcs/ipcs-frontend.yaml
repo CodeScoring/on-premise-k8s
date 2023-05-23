@@ -19,7 +19,7 @@ spec:
             claimName: django-static-pvc
       containers:
         - name: ipcs-frontend
-          image: registry-one.codescoring.com/ipcs-frontend:onprem
+          image: registry-one.codescoring.ru/ipcs-frontend
           envFrom:
             - configMapRef:
                 name: ipcs-env

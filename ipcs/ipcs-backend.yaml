@@ -1,6 +1,92 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  name: ipcs-tasks-high-priority
+
+spec:
+  serviceName: ipcs-tasks-high-priority
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipcs-tasks-high-priority
+
+  template:
+    metadata:
+      labels:
+        app: ipcs-tasks-high-priority
+    spec:
+
+      volumes:
+        - name: analysis-root
+          persistentVolumeClaim:
+            claimName: analysis-root-pvc
+
+      containers:
+        - name: ipcs-tasks-high-priority
+          image: registry-one.codescoring.ru/ipcs-huey
+          command: ["python"]
+          args: [ "manage.py", "djangohuey", "--queue", "high-priority", "--no-periodic" ]
+
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+            - secretRef:
+                name: ipcs-secrets
+
+          volumeMounts:
+            - name: analysis-root
+              mountPath: /analysis-root
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: cs-registry
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipcs-tasks-high-priority-scheduler
+
+spec:
+  serviceName: ipcs-tasks-high-priority-scheduler
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipcs-tasks-high-priority-scheduler
+
+  template:
+    metadata:
+      labels:
+        app: ipcs-tasks-high-priority-scheduler
+    spec:
+
+      volumes:
+        - name: analysis-root
+          persistentVolumeClaim:
+            claimName: analysis-root-pvc
+
+      containers:
+        - name: ipcs-tasks-high-priority-scheduler
+          image: registry-one.codescoring.ru/ipcs-huey
+          command: ["python"]
+          args: [ "manage.py", "djangohuey", "--queue", "high-priority", "--workers", "0" ]
+
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+            - secretRef:
+                name: ipcs-secrets
+
+          volumeMounts:
+            - name: analysis-root
+              mountPath: /analysis-root
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: cs-registry
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
   name: ipcs-huey
 
 spec:
@@ -23,9 +109,52 @@ spec:
 
       containers:
         - name: ipcs-huey
-          image: registry-one.codescoring.com/ipcs-huey:onprem
+          image: registry-one.codescoring.ru/ipcs-huey
           command: ["python"]
-          args: [ "manage.py", "run_huey" ]
+          args: [ "manage.py", "djangohuey", "--queue", "ipcs", "--no-periodic" ]
+
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+            - secretRef:
+                name: ipcs-secrets
+
+          volumeMounts:
+            - name: analysis-root
+              mountPath: /analysis-root
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: cs-registry
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipcs-huey-scheduler
+
+spec:
+  serviceName: ipcs-huey-scheduler
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipcs-huey-scheduler
+
+  template:
+    metadata:
+      labels:
+        app: ipcs-huey-scheduler
+    spec:
+
+      volumes:
+        - name: analysis-root
+          persistentVolumeClaim:
+            claimName: analysis-root-pvc
+
+      containers:
+        - name: ipcs-huey-scheduler
+          image: registry-one.codescoring.ru/ipcs-huey
+          command: ["python"]
+          args: [ "manage.py", "djangohuey", "--queue", "ipcs", "--workers", "0" ]
 
           envFrom:
             - configMapRef:
@@ -69,7 +198,7 @@ spec:
 
       containers:
         - name: ipcs-backend
-          image: registry-one.codescoring.com/ipcs-backend:onprem
+          image: registry-one.codescoring.ru/ipcs-backend
           command: ["gunicorn"]
           args: [ "ipcs.wsgi", "-c", "gunicorn_conf.py" ]
 

@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
         - name: ipcs-createbackup
-          image: registry-one.codescoring.com/ipcs-backup
+          image: registry-one.codescoring.ru/ipcs-backup:2022.48.1
           args: ['create']
 
           env:
