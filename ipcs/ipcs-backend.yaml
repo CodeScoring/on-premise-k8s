@@ -213,7 +213,7 @@ spec:
 
           volumeMounts:
             - name: django-static
-              mountPath: /ipcs-backend/static
+              mountPath: /ipcs-backend/files/static
             - name: analysis-root
               mountPath: /analysis-root
           imagePullPolicy: Always

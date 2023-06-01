@@ -52,7 +52,7 @@ spec:
           imagePullPolicy: Always
           volumeMounts:
             - name: django-static
-              mountPath: /ipcs-backend/static
+              mountPath: /ipcs-backend/files/static
       imagePullSecrets:
         - name: cs-registry
       restartPolicy: OnFailure
