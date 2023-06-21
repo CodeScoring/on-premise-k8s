@@ -95,7 +95,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:13.4
+          image: registry-one.codescoring.ru/postgres:13.4
           envFrom:
             - configMapRef:
                 name: postgres-configmap
