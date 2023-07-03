@@ -43,7 +43,7 @@ spec:
       containers:
         - name: ipcs-collectstatic
           image: registry-one.codescoring.ru/ipcs-backend
-          command: ['python', 'manage.py', 'collectstatic']
+          command: ['python', 'manage.py', 'collectstatic', '--noinput']
           envFrom:
           - configMapRef:
               name: ipcs-env
