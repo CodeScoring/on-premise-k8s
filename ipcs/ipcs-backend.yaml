@@ -21,6 +21,8 @@ spec:
           persistentVolumeClaim:
             claimName: analysis-root-pvc
 
+      automountServiceAccountToken: false
+
       containers:
         - name: ipcs-tasks-high-priority
           image: registry-one.codescoring.ru/ipcs-huey
@@ -63,6 +65,8 @@ spec:
         - name: analysis-root
           persistentVolumeClaim:
             claimName: analysis-root-pvc
+
+      automountServiceAccountToken: false
 
       containers:
         - name: ipcs-tasks-high-priority-scheduler
@@ -107,6 +111,8 @@ spec:
           persistentVolumeClaim:
             claimName: analysis-root-pvc
 
+      automountServiceAccountToken: false
+
       containers:
         - name: ipcs-huey
           image: registry-one.codescoring.ru/ipcs-huey
@@ -149,6 +155,8 @@ spec:
         - name: analysis-root
           persistentVolumeClaim:
             claimName: analysis-root-pvc
+
+      automountServiceAccountToken: false
 
       containers:
         - name: ipcs-huey-scheduler
@@ -195,6 +203,8 @@ spec:
         - name: analysis-root
           persistentVolumeClaim:
             claimName: analysis-root-pvc
+
+      automountServiceAccountToken: false
 
       containers:
         - name: ipcs-backend

@@ -17,6 +17,7 @@ spec:
         - name: django-static
           persistentVolumeClaim:
             claimName: django-static-pvc
+      automountServiceAccountToken: false
       containers:
         - name: ipcs-frontend
           image: registry-one.codescoring.ru/ipcs-frontend

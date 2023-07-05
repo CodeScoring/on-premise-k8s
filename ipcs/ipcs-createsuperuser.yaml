@@ -5,6 +5,7 @@ metadata:
 spec:
   template:
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: ipcs-createsuperuser
           image: registry-one.codescoring.ru/ipcs-backend:2022.48.1
