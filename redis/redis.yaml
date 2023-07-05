@@ -57,6 +57,7 @@ spec:
       labels:
         app: redis
     spec:
+      automountServiceAccountToken: false
       containers:
       - name: redis
         image: registry-one.codescoring.ru/redis:7.0.10
