@@ -11,10 +11,22 @@ spec:
           persistentVolumeClaim:
             claimName: analysis-root-pvc
       automountServiceAccountToken: false
+      initContainers:
+        - name: fix-volume-permissions
+          image: registry-one.codescoring.ru/ipcs-backend
+          command: ["chown", "-R", "1050:1050", "/analysis-root"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: analysis-root
+              mountPath: /analysis-root
       containers:
         - name: ipcs-migrate
           image: registry-one.codescoring.ru/ipcs-backend
           command: ['python', 'manage.py', 'migrate']
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           envFrom:
           - configMapRef:
               name: ipcs-env
@@ -42,10 +54,22 @@ spec:
           persistentVolumeClaim:
             claimName: django-static-pvc
       automountServiceAccountToken: false
+      initContainers:
+        - name: fix-volume-permissions
+          image: registry-one.codescoring.ru/ipcs-backend
+          command: ["chown", "-R", "1050:1050", "/ipcs-backend/files"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: django-static
+              mountPath: /ipcs-backend/files/static
       containers:
         - name: ipcs-collectstatic
           image: registry-one.codescoring.ru/ipcs-backend
           command: ['python', 'manage.py', 'collectstatic', '--noinput']
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           envFrom:
           - configMapRef:
               name: ipcs-env

@@ -41,9 +41,11 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: ipcs-createbackup
-          image: registry-one.codescoring.ru/ipcs-backup:2022.48.1
+          image: registry-one.codescoring.ru/ipcs-backup
           args: ['create']
-
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           env:
             - name: POSTGRES_HOST
               value: postgres

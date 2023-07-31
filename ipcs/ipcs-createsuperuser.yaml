@@ -8,9 +8,11 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: ipcs-createsuperuser
-          image: registry-one.codescoring.ru/ipcs-backend:2022.48.1
+          image: registry-one.codescoring.ru/ipcs-backend
           command: ['python', 'manage.py', 'createsuperuser', '--noinput' ]
-
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           envFrom:
           - configMapRef:
               name: ipcs-env

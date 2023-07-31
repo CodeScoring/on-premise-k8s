@@ -21,6 +21,9 @@ spec:
       containers:
         - name: ipcs-frontend
           image: registry-one.codescoring.ru/ipcs-frontend
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           envFrom:
             - configMapRef:
                 name: ipcs-env

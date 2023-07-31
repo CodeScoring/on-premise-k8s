@@ -28,7 +28,9 @@ spec:
           image: registry-one.codescoring.ru/ipcs-huey
           command: ["python"]
           args: [ "manage.py", "djangohuey", "--queue", "high-priority", "--no-periodic" ]
-
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           envFrom:
             - configMapRef:
                 name: ipcs-env
@@ -73,7 +75,9 @@ spec:
           image: registry-one.codescoring.ru/ipcs-huey
           command: ["python"]
           args: [ "manage.py", "djangohuey", "--queue", "high-priority", "--workers", "0" ]
-
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           envFrom:
             - configMapRef:
                 name: ipcs-env
@@ -118,7 +122,9 @@ spec:
           image: registry-one.codescoring.ru/ipcs-huey
           command: ["python"]
           args: [ "manage.py", "djangohuey", "--queue", "ipcs", "--no-periodic" ]
-
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           envFrom:
             - configMapRef:
                 name: ipcs-env
@@ -163,7 +169,9 @@ spec:
           image: registry-one.codescoring.ru/ipcs-huey
           command: ["python"]
           args: [ "manage.py", "djangohuey", "--queue", "ipcs", "--workers", "0" ]
-
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           envFrom:
             - configMapRef:
                 name: ipcs-env
@@ -211,7 +219,9 @@ spec:
           image: registry-one.codescoring.ru/ipcs-backend
           command: ["gunicorn"]
           args: [ "ipcs.wsgi", "-c", "gunicorn_conf.py" ]
-
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
           ports:
             - containerPort: 18000
 
