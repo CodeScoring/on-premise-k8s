@@ -72,8 +72,12 @@ spec:
         args:
           - "--stop-writes-on-bgsave-error no"
           - "--save 60 1"
+      imagePullSecrets:
+        - name: cs-registry
+
       volumes:
         - name: redis-pv
           persistentVolumeClaim:
             claimName: redis-pvc
+
 
