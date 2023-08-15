@@ -16,7 +16,7 @@ data:
   NODE_PATH: "/jscpd/node_modules"
   JOHNNY_BIN: "/agents/johnny-linux-amd64"
   HASHER_BIN: "/agents/hasher-linux-amd64"
-  JSCPD_BIN_PATH: "/jscpd/node_modules/jscpd/bin/jscpd"
+  JSCPD_BIN: "/jscpd/node_modules/jscpd/bin/jscpd"
   ALLOWED_HOSTS: "*"
   HUEY_WORKERS: "8"
   INDEX_API_URL: "https://index.codescoring.ru"
