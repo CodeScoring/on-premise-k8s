@@ -240,7 +240,61 @@ spec:
 
       imagePullSecrets:
         - name: cs-registry
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipcs-backend-osa
 
+spec:
+  serviceName: ipcs-backend-osa
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipcs-backend-osa
+
+  template:
+    metadata:
+      labels:
+        app: ipcs-backend-osa
+    spec:
+
+      volumes:
+        - name: django-static
+          persistentVolumeClaim:
+            claimName: django-static-pvc
+        - name: analysis-root
+          persistentVolumeClaim:
+            claimName: analysis-root-pvc
+
+      automountServiceAccountToken: false
+
+      containers:
+        - name: ipcs-backend-osa
+          image: registry-one.codescoring.ru/ipcs-backend
+          command: ["gunicorn"]
+          args: [ "ipcs.asgi:application", "-w", "12", "--worker-class", "ipcs.asgi.LifespanOffUvicornWorker", "--bind", "0.0.0.0:8001" ]
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
+          ports:
+            - containerPort: 8001
+
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+            - secretRef:
+                name: ipcs-secrets
+
+          volumeMounts:
+            - name: django-static
+              mountPath: /ipcs-backend/files/static
+            - name: analysis-root
+              mountPath: /analysis-root
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: cs-registry
 ---
 apiVersion: v1
 kind: Service
@@ -253,3 +307,15 @@ spec:
     - protocol: TCP
       port: 18000
       targetPort: 18000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-osa
+spec:
+  selector:
+     app: ipcs-backend-osa
+  ports:
+    - protocol: TCP
+      port: 8001
+      targetPort: 8001
