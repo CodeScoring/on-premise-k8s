@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pgcat
+
+spec:
+  serviceName: pgcat
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgcat
+
+  template:
+    metadata:
+      labels:
+        app: pgcat
+    spec:
+
+      automountServiceAccountToken: false
+
+      containers:
+        - name: pgcat
+          image: registry-one.codescoring.ru/ipcs-pgcat
+          args: ["pgcat", "/etc/pgcat/pgcat.toml"] 
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
+          ports:
+            - containerPort: 6432
+
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+            - secretRef:
+                name: ipcs-secrets
+
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: cs-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgcat
+spec:
+  selector:
+     app: pgcat
+  ports:
+    - protocol: TCP
+      port: 6432
+      targetPort: 6432
