@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ipcs-fix-permissions
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      volumes:
+        - name: django-static
+          persistentVolumeClaim:
+            claimName: django-static-pvc
+        - name: analysis-root
+          persistentVolumeClaim:
+            claimName: analysis-root-pvc
+
+      automountServiceAccountToken: false
+      containers:
+        - name: ipcs-fix-permissions
+          image: registry-one.codescoring.ru/ipcs-backend:2023.38.0-unpriv
+          command: ["/bin/bash", "-c", "chown -R 1050:1050 /ipcs-backend/files/static && \
+            chown -R 1050:1050 /analysis-root && echo Permission fix success" ]
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          volumeMounts:
+            - name: django-static
+              mountPath: /ipcs-backend/files/static
+            - name: analysis-root
+              mountPath: /analysis-root
+
+      imagePullSecrets:
+        - name: cs-registry
+
+      restartPolicy: Never
+
+  backoffLimit: 1
