@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipcs-osa-api
+spec:
+  serviceName: ipcs-osa-api
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipcs-osa-api
+  template:
+    metadata:
+      labels:
+        app: ipcs-osa-api
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: ipcs-osa-api
+          image: registry-one.codescoring.ru/ipcs-osa-api
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+            - secretRef:
+                name: ipcs-secrets
+          ports:
+            - containerPort: 8002
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: cs-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: osa-api
+spec:
+  selector:
+     app: ipcs-osa-api
+  ports:
+    - protocol: TCP
+      port: 8002
+      targetPort: 8002
