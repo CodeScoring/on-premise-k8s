@@ -10,14 +10,15 @@ resources:
 namespace: codescoring
 images:
   - name: registry-one.codescoring.ru/ipcs-huey
-    newTag: "2023.41.0"
+    newTag: "2023.43.0-alpha"
   - name: registry.one.codescoring.ru/ipcs-backend
-    newTag: "2023.41.0"
+    newTag: "2023.43.0-alpha"
   - name: registry-one.codescoring.ru/ipcs-backup
-    newTag: "2023.41.0"
+    newTag: "2023.43.0-alpha"
   - name: registry-one.codescoring.ru/ipcs-frontend
-    newTag: "2023.41.0"
+    newTag: "2023.43.0-alpha"
   - name: registry-one.codescoring.ru/ipcs-pgcat
-    newTag: "2023.41.0"
+    newTag: "2023.43.0-alpha"
   - name: registry-one.codescoring.ru/ipcs-osa-api
-    newTag: "2023.41.0"
+    newTag: "2023.43.0-alpha"
+
