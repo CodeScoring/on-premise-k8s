@@ -20,6 +20,7 @@ data:
   JSCPD_BIN: "/jscpd/node_modules/jscpd/bin/jscpd"
   ALLOWED_HOSTS: "*"
   HUEY_WORKERS: "8"
+  HUEY_HIGH_PRIORITY_WORKERS: "8"
   INDEX_API_URL: "https://index.codescoring.ru"
   REQUESTS_CA_BUNDLE: "/etc/ssl/certs/ca-certificates.crt"
   DJANGO_CSRF_TRUSTED_ORIGINS: "http://localhost:18000"
