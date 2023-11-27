@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: ipcs-env
 data:
+  PATH: "/venv/bin:${PATH}:/jscpd/node_modules/jscpd/bin:/sbin:/bin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin"
   SITE_SCHEME: "https"
   SITE_HOST: "codescoring.k8s.local"
   NGINX_HOST: "codescoring.k8s.local"
