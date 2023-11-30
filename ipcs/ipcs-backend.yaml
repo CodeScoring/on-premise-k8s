@@ -416,10 +416,57 @@ spec:
       automountServiceAccountToken: false
 
       containers:
-        - name: ipcs-tasks-osa
+        - name: ipcs-tasks-osa-container-image-scan
           image: registry-one.codescoring.ru/ipcs-huey
           command: ["python"]
           args: [ "manage.py", "djangohuey", "--queue", "osa-container-image-scan", "--no-periodic" ]
+          securityContext:
+            runAsUser: 1050
+            runAsGroup: 1050
+          envFrom:
+            - configMapRef:
+                name: ipcs-env
+            - secretRef:
+                name: ipcs-secrets
+
+          volumeMounts:
+            - name: analysis-root
+              mountPath: /analysis-root
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: cs-registry
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipcs-tasks-policy
+
+spec:
+  serviceName: ipcs-tasks-policy
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipcs-tasks-policy
+
+  template:
+    metadata:
+      labels:
+        app: ipcs-tasks-policy
+    spec:
+
+      volumes:
+        - name: analysis-root
+          persistentVolumeClaim:
+            claimName: analysis-root-pvc
+
+      automountServiceAccountToken: false
+
+      containers:
+        - name: ipcs-tasks-policy
+          image: registry-one.codescoring.ru/ipcs-huey
+          command: ["python"]
+          args: [ "manage.py", "djangohuey", "--queue", "policy", "--no-periodic" ]
           securityContext:
             runAsUser: 1050
             runAsGroup: 1050
